@@ -283,13 +283,39 @@ class Invite extends Part implements Stringable
     /**
      * Returns the roles for this invite.
      *
+     * This will only have partial data based on what the invite endpoint provides.
+     * Properties for `description`, `hoist`, `managed`, `mentionable`, `tags`, and `flags` will not be set.
+     * `permissions` will only contain permissions related to the invite and may not be present at all.
+     *
      * @since 10.46.0
      *
      * @return ExCollectionInterface<Role> The roles assigned to the user upon accepting the invite.
      */
     protected function getRolesAttribute(): ExCollectionInterface
     {
-        return $this->attributeCollectionHelper('roles', Role::class);
+        $class = Role::class;
+
+        /** @var ExCollectionInterface $collection */
+        $collection = $this->discord->getCollectionClass()::for($class, 'id');
+
+        if (empty($this->attributes['roles'])) {
+            return $collection;
+        }
+
+        foreach ($this->attributes['roles'] as &$part) {
+            if (! $part instanceof $class) {
+                $part = $this->createOf($class, $part);
+                if ($guild = $this->guild) {
+                    if ($role = $guild->roles->get('id', $part->id)) {
+                        $part->fill((array) $role);
+                    }
+                }
+            }
+
+            $collection->pushItem($part);
+        }
+
+        return $collection;
     }
 
     /**
@@ -301,7 +327,7 @@ class Invite extends Part implements Stringable
      *
      * @todo Parse the CSV response to an array.
      * @since 10.46.0
-     * 
+     *
      * @throws NoPermissionsException If the bot does not have permission to view the audit log or manage the guild, and is not the inviter.
      *
      * @return PromiseInterface<array|string> The CSV file's content containing the user IDs.
@@ -328,9 +354,9 @@ class Invite extends Part implements Stringable
      *
      * @param string      $filepath Path to the file to send.
      * @param string|null $filename Name to send the file as. `null` for the base name of `$filepath`.
-     * 
+     *
      * @throws NoPermissionsException If the bot does not have permission to view the audit log or manage the guild, and is not the inviter.
-     * @throws FileNotFoundException If the file does not exist or is not readable.
+     * @throws FileNotFoundException  If the file does not exist or is not readable.
      *
      * @return PromiseInterface
      */
@@ -364,7 +390,7 @@ class Invite extends Part implements Stringable
      *
      * @param string $content  Content of the file.
      * @param string $filename Name to send the file as.
-     * 
+     *
      * @throws NoPermissionsException If the bot does not have permission to view the audit log or manage the guild, and is not the inviter.
      *
      * @return PromiseInterface
@@ -399,7 +425,7 @@ class Invite extends Part implements Stringable
      * Requires the caller to be the inviter, or have `MANAGE_GUILD` permission, or have `VIEW_AUDIT_LOG` permission.
      *
      * @todo
-     * 
+     *
      * @throws NoPermissionsException If the bot does not have permission to view the audit log or manage the guild, and is not the inviter.
      *
      * @return PromiseInterface<InviteJobStatus> The job status.
