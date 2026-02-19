@@ -27,8 +27,8 @@ namespace Discord\Parts\Channel\Message;
  * @property string|null       $id      Optional identifier for component.
  * @property UnfurledMediaItem $file    Unfurled media item, supports only attachment://<filename> syntax.
  * @property bool|null         $spoiler Whether the media should be a spoiler (blurred out). Defaults to false.
- * @property ?string           $name    Name of the file. This field is ignored and provided by the API as part of the response.
- * @property ?int              $size    Size of the file in bytes. This field is ignored and provided by the API as part of the response.
+ * @property string|null       $name    Name of the file. This field is ignored and provided by the API as part of the response.
+ * @property int|null          $size    Size of the file in bytes. This field is ignored and provided by the API as part of the response.
  */
 class File extends Content
 {
