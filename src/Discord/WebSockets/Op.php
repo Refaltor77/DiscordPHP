@@ -195,6 +195,8 @@ class Op
     public const CLOSE_VOICE_SERVER_CRASH = 4015;
     /** Unknown encryption mode. */
     public const CLOSE_VOICE_UNKNOWN_ENCRYPT = 4016;
+    /** E2EE/DAVE protocol required. */
+    public const CLOSE_VOICE_E2EE_DAVE_REQUIRED = 4017;
     /** You sent a malformed request. */
     public const CLOSE_VOICE_BAD_REQUEST = 4020;
     /** Disconnect due to rate limit exceeded. Should not reconnect. */
