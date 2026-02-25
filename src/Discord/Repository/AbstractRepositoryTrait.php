@@ -590,10 +590,8 @@ trait AbstractRepositoryTrait
      * @param callable $callback
      *
      * @return CollectionInterface
-     *
-     * @todo This method will be typed to return a CollectionInterface in v11
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback): CollectionInterface
     {
         $collection = new Collection([], $this->discrim, $this->class);
 

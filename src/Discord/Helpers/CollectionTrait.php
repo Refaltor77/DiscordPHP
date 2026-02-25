@@ -290,10 +290,8 @@ trait CollectionTrait
      * @param callable $callback
      *
      * @return CollectionInterface
-     *
-     * @todo This method will be typed to return a CollectionInterface in v11
      */
-    public function filter(callable $callback)
+    public function filter(callable $callback): CollectionInterface
     {
         $collection = new Collection([], $this->discrim, $this->class);
 
@@ -409,7 +407,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function slice(int $offset, ?int $length = null, bool $preserve_keys = false)
+    public function slice(int $offset, ?int $length = null, bool $preserve_keys = false): CollectionInterface
     {
         $items = $this->items;
 
@@ -425,7 +423,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function sort(callable|int|null $callback)
+    public function sort(callable|int|null $callback): CollectionInterface
     {
         $items = $this->items;
 
@@ -447,7 +445,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function diff($items, ?callable $callback = null)
+    public function diff($items, ?callable $callback = null): CollectionInterface
     {
         $items = $items instanceof CollectionInterface
             ? $items->toArray()
@@ -471,7 +469,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function intersect($items, ?callable $callback = null)
+    public function intersect($items, ?callable $callback = null): CollectionInterface
     {
         $items = $items instanceof CollectionInterface
             ? $items->toArray()
@@ -492,7 +490,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function walk(callable $callback, mixed $arg)
+    public function walk(callable $callback, mixed $arg): CollectionInterface
     {
         $items = $this->items;
 
@@ -509,7 +507,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function reduce(callable $callback, $initial = null)
+    public function reduce(callable $callback, $initial = null): CollectionInterface
     {
         $items = $this->items;
 
@@ -525,7 +523,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function map(callable $callback)
+    public function map(callable $callback): CollectionInterface
     {
         $keys = array_keys($this->items);
         $values = array_map($callback, array_values($this->items));
@@ -540,7 +538,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function unique(int $flags = SORT_STRING)
+    public function unique(int $flags = SORT_STRING): CollectionInterface
     {
         return new Collection(array_unique($this->items, $flags), $this->discrim, $this->class);
     }
@@ -578,7 +576,7 @@ trait CollectionTrait
      *
      * @return CollectionInterface
      */
-    public function collect()
+    public function collect(): CollectionInterface
     {
         return new Collection($this->items, $this->discrim, $this->class);
     }

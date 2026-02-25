@@ -22,6 +22,7 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, IteratorAgg
     public function get(string $discrim, $key);
     public function set($offset, $value);
     public function pull($key, $default = null);
+    public function shift();
     public function fill($items): self;
     public function push(...$items): self;
     public function pushItem($item): self;
@@ -30,11 +31,26 @@ interface CollectionInterface extends ArrayAccess, JsonSerializable, IteratorAgg
     public function last();
     public function isset($offset): bool;
     public function has(...$keys): bool;
-    public function filter(callable $callback);
+    public function search(mixed $needle, bool $strict = false): string|int|false;
+    public function filter(callable $callback): CollectionInterface;
     public function find(callable $callback);
+    public function find_key(callable $callback);
+    public function any(callable $callback): bool;
+    public function all(callable $callback): bool;
     public function clear(): void;
-    public function map(callable $callback);
+    public function splice(int $offset, ?int $length, mixed $replacement = []): self;
+    public function slice(int $offset, ?int $length = null, bool $preserve_keys = false): CollectionInterface;
+    public function sort(callable|int|null $callback): CollectionInterface;
+    public function diff($items, ?callable $callback = null): CollectionInterface;
+    public function intersect($items, ?callable $callback = null): CollectionInterface;
+    public function walk(callable $callback, mixed $arg): CollectionInterface;
+    public function reduce(callable $callback, $initial = null): CollectionInterface;
+    public function map(callable $callback): CollectionInterface;
+    public function unique(int $flags = SORT_STRING): CollectionInterface;
     public function merge($collection): self;
+    public function collect(): CollectionInterface;
+    public function keys(): array;
+    public function values(): array;
     public function toArray();
     public function offsetExists($offset): bool;
     #[\ReturnTypeWillChange]
